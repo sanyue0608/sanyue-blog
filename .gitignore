@@ -83,3 +83,6 @@ _reference/
 
 # 本地预览截图
 .preview/
+
+# 部署包
+dist.zip
