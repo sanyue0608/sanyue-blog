@@ -56,20 +56,24 @@ export const fontConfig: FontConfig = withUserConfig("font", {
 			id: "outfit-body",
 			family: "Outfit",
 			role: "body",
-			source: "fontsource",
+			// 用本地文件而不是 source: "fontsource"：后者会让 Astro 在构建时从
+			// cdn.jsdelivr.net 下载字体来算排版度量，网络抖一下整个构建就失败
+			// （CI / EdgeOne 这类环境尤其容易踩到）。文件来自 @fontsource/outfit 包，
+			// 复制到 src/assets/fonts/ 后即可离线构建。
+			source: "local",
 			variants: [
 				{
-					file: "@fontsource/outfit/400.css",
+					file: "src/assets/fonts/outfit-latin-400.woff2",
 					weight: 400,
 					style: "normal",
 				},
 				{
-					file: "@fontsource/outfit/500.css",
+					file: "src/assets/fonts/outfit-latin-500.woff2",
 					weight: 500,
 					style: "normal",
 				},
 				{
-					file: "@fontsource/outfit/700.css",
+					file: "src/assets/fonts/outfit-latin-700.woff2",
 					weight: 700,
 					style: "normal",
 				},
@@ -106,15 +110,16 @@ export const fontConfig: FontConfig = withUserConfig("font", {
 			id: "jetbrains-mono",
 			family: "JetBrains Mono",
 			role: "mono",
-			source: "fontsource",
+			// 同上：改为本地可变字体文件（来自 @fontsource-variable/jetbrains-mono）。
+			source: "local",
 			variants: [
 				{
-					file: "@fontsource-variable/jetbrains-mono/index.css",
+					file: "src/assets/fonts/jetbrains-mono-latin-wght.woff2",
 					weight: "100 800",
 					style: "normal",
 				},
 				{
-					file: "@fontsource-variable/jetbrains-mono/wght-italic.css",
+					file: "src/assets/fonts/jetbrains-mono-latin-wght-italic.woff2",
 					weight: "100 800",
 					style: "italic",
 				},
