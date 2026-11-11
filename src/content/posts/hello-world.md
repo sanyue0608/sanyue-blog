@@ -5,6 +5,8 @@ publishedAt: 2026-11-11T20:30:00+08:00
 description: 这里的第一篇文章。记录一下这个小站是怎么来的，以及它以后会长成什么样。
 tags: [随笔, 建站]
 category: 生活
+series: site-log
+seriesOrder: 1
 draft: false
 ---
 
