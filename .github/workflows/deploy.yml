@@ -1,0 +1,74 @@
+# 构建 Astro 站点并发布到 GitHub Pages。
+#
+# 触发：推送到 main / 手动运行。
+# 产物：dist/ → GitHub Pages（自定义域名 sanyue0608.site）
+#
+# 仓库设置里需要一次性配置（见「使用手册」§5.4）：
+#   1. Settings → Pages → Build and deployment → Source 选 "GitHub Actions"
+#   2. Settings → Pages → Custom domain 填 sanyue0608.site
+#   3. 仓库必须是 Public（免费账号的 Pages 不支持私有仓库）
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# 同一时间只跑一个部署；新的提交会取消进行中的旧构建。
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 不写 version：让 action 读 package.json 里的 packageManager（pnpm@11.28.2），
+      # 避免这里的版本号和项目声明的版本打架。
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build site
+        run: pnpm build
+        env:
+          CI: true
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
