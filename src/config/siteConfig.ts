@@ -12,7 +12,7 @@ import { withUserConfig } from "../utils/config-overlay.ts";
 export const siteConfig: SiteConfig = withUserConfig("site", {
 	// ↓↓↓ 上线后把这里改成你的正式域名（末尾保留斜杠）。
 	// 它决定 RSS、Sitemap、分享卡片里的绝对地址；域名变了必须改这里并重新构建。
-	site: "https://example.com/",
+	site: "https://sanyue0608.site/",
 	// 部署在域名根目录时保持 "/"；只有部署在子路径（如 GitHub Pages 的 /仓库名/）才改成 "/仓库名"。
 	base: "/",
 	title: "叁月的博客",
